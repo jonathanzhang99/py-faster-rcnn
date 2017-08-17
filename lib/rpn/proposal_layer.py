@@ -27,7 +27,15 @@ class ProposalLayer(caffe.Layer):
 
         self._feat_stride = layer_params['feat_stride']
         anchor_scales = layer_params.get('scales', (8, 16, 32))
-        self._anchors = generate_anchors(scales=np.array(anchor_scales))
+        base_size = layer_params.get('base')
+        if base_size:
+            print "Using base size of:", base_size
+            self._anchors = generate_anchors(base_size=base_size,
+                                             scales=np.array(anchor_scales))
+        else:
+            self._anchors = generate_anchors(scales=np.array(anchor_scales))
+
+        # self._anchors = generate_anchors()
         self._num_anchors = self._anchors.shape[0]
 
         if DEBUG:
