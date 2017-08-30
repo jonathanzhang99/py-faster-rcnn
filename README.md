@@ -45,8 +45,8 @@ to
 ```python
 __C.PIXEL_MEANS = np.array([[[0, 0, 0, ]]])
 ```
-- If you want to make any other custom adjustments to the configurations, create a new .yaml file in `experiments/cfgs/`
-- If you want to use your own network, as opposed to the default VGG16 Imagenet model, you will have to create your own training script and change `--weights data/imagenet_models/${NET}.v2.caffemodel \` to point to your own caffemodel
+- If you want to make any other custom adjustments to the configurations, create a new yaml file in `experiments/cfgs/`
+- If you want to use your own network, as opposed to the default VGG16 Imagenet model, you can create your own training script by duplicating the script file and change the line `--weights data/imagenet_models/${NET}.v2.caffemodel \` to point to your own caffemodel
 
 
 ### Testing
