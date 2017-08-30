@@ -14,6 +14,9 @@ Some notes for Caffe installation in no particular order
 	2. [ROI Augmentation Test](#roi-augmentation-test)
 	3. [ROI Cropping Test](#roi-cropping-test)
 	4. [Tile RCNN](#tile-rcnn)
+	5. [Video RCNN](#video-rcnn)
+5. [FPGA](#fpga)
+
 ### Datasets
 #### Pascal VOC
 All networks, tests, and configurations in this repository were conducted using the 20-category [PASCAL VOC 2007 dataset](http://host.robots.ox.ac.uk/pascal/VOC/voc2007/index.html). Follow the steps outlined in the original Faster RCNN repository for proper download and setup
@@ -101,6 +104,9 @@ original ROIs
 **Purpose:** Novel method to increase the accuracy of a fixed resolution neural network by sacrificing speed
 **Work in Progress:** I believe that further training on "tiled" feature maps is necessary in order to achieve acceptable results.
 
-### Video RCNN
+#### Video RCNN
 **File:** `tools/faster_rcnn_video.py`
 1. Runs the faster rcnn algorithm on a video file
+
+### FPGA
+The `fpga_project` folder contains all of the scripts to use the Faster RCNN algorithm on the FPGA. The code uses the GyrFalcon FPGA SDK which is **NOT** included in the repository for proprietary reasons. The SDK needs to be properly installed and accessible by the script in order to run.
