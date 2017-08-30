@@ -6,14 +6,20 @@ Some notes for Caffe installation in no particular order
 - If using CPU only version of Faster RCNN, please refer [here](TODO://linkToCPUInstructions)
 
 ### Contents
-1. [Training](#training)
-2. [Testing](#testing)
-3. [Experiments](#experiments)
+1. [Datasets](#datasets)
+2. [Training](#training)
+3. [Testing](#testing)
+4. [Experiments](#experiments)
 	1. [ROI Substitution Test](#roi-substitution-test)
 	2. [ROI Augmentation Test](#roi-augmentation-test)
 	3. [ROI Cropping Test](#roi-cropping-test)
 	4. [Tile RCNN](#tile-rcnn)
+### Datasets
+#### Pascal VOC
+All networks, tests, and configurations in this repository were conducted using the 20-category [PASCAL VOC 2007 dataset](http://host.robots.ox.ac.uk/pascal/VOC/voc2007/index.html). Follow the steps outlined in the original Faster RCNN repository for proper download and setup
 
+#### Microsoft COCO dataset
+Better results can be achieved using the 80-category [Microsoft COCO dataset](http://cocodataset.org/dataset.htm#overview). Instructions for the dataset setup can also be found on the original Faster RCNN repostiroy underneath the `data` directory. **IMPORTANT:** You will need to supply the correct dataset when using the training and testing script. You should also check that the prototxt files and configurations are correct.
 
 ### Training
 
@@ -67,18 +73,34 @@ original ROIs
 4. Performs evaluation
 
 **Purpose:** Able to test the difference in
-1. quality between ROIs generated from a higher resolution image vs that of a lower resolutino
+1. quality between ROIs generated from a higher resolution image vs that of a lower resolution
 2. classification/bounding box ability between a higher resolution feature map and a lower resolution feature map given the same ROIs
 
 
 #### Roi Augmentation Test
-File: `tools/roi_augmented_faster_rcnn.py`
-1. Takes the original image and slides a window across
+**File:** `tools/roi_augmented_faster_rcnn.py`
+1. Takes the original image and slides a NxN window (224x224) to generate cropped regions.
+2. Feed cropped regions into network and aggregates ROIs from RPN step across all regions.
+3. Feed lower res (224x224) image into network and *ADDS* the previously generated ROIs to the lower-res-generated ROIs from the RPN step.
+4. Performs evaluation
+
+**Purpose:** Able to test if higher resolution ROIs from crops are able to increase the performance of the overall network.
 
 
-### ROI Cropping RCNN
+#### ROI Cropping RCNN
 
 
 #### Tile RCNN
+**File:** `tools/tile_rcnn.py`
+1. Takes the original image and slides a NxN window (224x224) to generate cropped regions.
+2. Feed cropped regions into network and extracts the feature map generated at the conv5\_3 layer (e.g. the last convolutional feature map used for RPN and classification)
+3. Combines all feature maps by calculating the overlap between adjacent feature maps (in relation to the original image) and taking the maximum value between the overlapping regions.
+	* Hypothetically, this process should create a feature map that is similar to a feature map generated from passing the original size image through the network.
+3. Do evaluation
 
-## Video RCNN
+**Purpose:** Novel method to increase the accuracy of a fixed resolution neural network by sacrificing speed
+**Work in Progress:** I believe that further training on "tiled" feature maps is necessary in order to achieve acceptable results.
+
+### Video RCNN
+**File:** `tools/faster_rcnn_video.py`
+1. Runs the faster rcnn algorithm on a video file
